@@ -22,19 +22,19 @@ public class CommandHandler
     {
         try
         {
-            var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            string[] parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
             if (parts.Length == 0)
                 throw new ArgumentException("Command cannot be empty.");
 
-            var command = parts[0];
+            string command = parts[0];
 
-            if (!handlers.TryGetValue(command, out var definition))
+            if (!handlers.TryGetValue(command, out CommandDefinition? definition))
             {
                 throw new ArgumentException($"Invalid command: '{command}'.");
             }
 
-            var args = parts.Skip(1).ToArray();
+            string[] args = parts.Skip(1).ToArray();
 
             ValidateArguments(
                 command,

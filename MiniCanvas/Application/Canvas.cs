@@ -81,7 +81,7 @@ public class Canvas
 
         while (queue.Count > 0)
         {
-            var (x, y) = queue.Dequeue();
+            (int x, int y) = queue.Dequeue();
 
             if (!IsInside(x, y))
                 continue;
