@@ -53,7 +53,7 @@ public class CommandHandler
         }
     }
 
-    private static void ValidateArguments(
+    private void ValidateArguments(
         string command,
         string[] args,
         IReadOnlyList<char> expectedArguments)
@@ -92,7 +92,7 @@ public class CommandHandler
         }
     }
 
-    private static void HandleException(Exception e)
+    private void HandleException(Exception e)
     {
         switch (e)
         {
@@ -167,10 +167,5 @@ public class CommandHandler
     private void Quit(string[] args)
     {
         Environment.Exit(0);
-    }
-
-    public Canvas? GetCanvas()
-    {
-        return canvas;
     }
 }
