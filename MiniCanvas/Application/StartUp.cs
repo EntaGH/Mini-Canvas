@@ -13,7 +13,9 @@ public class StartUp
             string? input = Console.ReadLine();
 
             if (string.IsNullOrWhiteSpace(input))
+            {
                 continue;
+            }
 
             commandHandler.Handle(input);
         }

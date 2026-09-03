@@ -2,21 +2,26 @@
 
 public class Canvas
 {
-    private readonly char drawCharacter = 'x';
-    private readonly char defaultCharacter = ' ';
-    private readonly int width;
-    private readonly int height;
-    private readonly char[,] pixels;
+    private readonly char DrawCharacter = 'x';
+    private readonly char DefaultCharacter = ' ';
+    private readonly char BorderHorizontalCharacter = '-';
+    private readonly char BorderVerticalCharacter = '|';
+    private readonly char BorderCornerCharacter = '+';
+    private readonly int Width;
+    private readonly int Height;
+    private readonly char[,] Pixels;
 
     public Canvas(int width, int height)
     {
         if (width <= 0 || height <= 0)
+        {
             throw new ArgumentOutOfRangeException("Canvas size must be greater than zero.");
+        }
 
-        this.width = width;
-        this.height = height;
+        this.Width = width;
+        this.Height = height;
 
-        pixels = new char[height + 2, width + 2];
+        Pixels = new char[height + 2, width + 2];
 
         Clear();
         DrawBorder();
@@ -24,6 +29,11 @@ public class Canvas
 
     public void DrawLine(int x1, int y1, int x2, int y2)
     {
+        if (x1 != x2 && y1 != y2)
+        {
+            throw new ArgumentException("Line must be horizontal or vertical.");
+        }
+
         if (x1 == x2)
         {
             int start = Math.Min(y1, y2);
@@ -31,23 +41,19 @@ public class Canvas
 
             for (int y = start; y <= end; y++)
             {
-                SetPixel(x1, y, drawCharacter);
+                SetPixel(x1, y, DrawCharacter);
             }
         }
-        else if (y1 == y2)
+        else
         {
             int start = Math.Min(x1, x2);
             int end = Math.Max(x1, x2);
 
             for (int x = start; x <= end; x++)
             {
-                SetPixel(x, y1, drawCharacter);
+                SetPixel(x, y1, DrawCharacter);
             }
         }
-        else
-        {
-            throw new Exception("Line must be horizontal or vertical.");
-        }    
     }
 
     public void DrawRectangle(
@@ -68,12 +74,16 @@ public class Canvas
         char color)
     {
         if (!IsInside(startX, startY))
+        {
             return;
+        }
 
         char oldColor = GetPixel(startX, startY);
 
         if (oldColor == color)
+        {
             return;
+        }
 
         Queue<(int x, int y)> queue = new();
 
@@ -84,10 +94,14 @@ public class Canvas
             (int x, int y) = queue.Dequeue();
 
             if (!IsInside(x, y))
+            {
                 continue;
+            }
 
             if (GetPixel(x, y) != oldColor)
+            {
                 continue;
+            }
 
             SetPixel(x, y, color);
 
@@ -100,11 +114,11 @@ public class Canvas
 
     public void Print()
     {
-        for (int y = 0; y < height + 2; y++)
+        for (int y = 0; y < Height + 2; y++)
         {
-            for (int x = 0; x < width + 2; x++)
+            for (int x = 0; x < Width + 2; x++)
             {
-                Console.Write(pixels[y, x]);
+                Console.Write(Pixels[y, x]);
             }
 
             Console.WriteLine();
@@ -113,53 +127,55 @@ public class Canvas
 
     private char GetPixel(int x, int y)
     {
-        return pixels[y, x];
+        return Pixels[y, x];
     }
 
     private void SetPixel(int x, int y, char value)
     {
         if (!IsInside(x, y))
+        {
             return;
+        }
 
-        pixels[y, x] = value;
+        Pixels[y, x] = value;
     }
 
     private bool IsInside(int x, int y)
     {
         return x >= 1 &&
-               x <= width &&
+               x <= Width &&
                y >= 1 &&
-               y <= height;
+               y <= Height;
     }
 
     private void Clear()
     {
-        for (int y = 0; y < height + 2; y++)
+        for (int y = 0; y < Height + 2; y++)
         {
-            for (int x = 0; x < width + 2; x++)
+            for (int x = 0; x < Width + 2; x++)
             {
-                pixels[y, x] = defaultCharacter;
+                Pixels[y, x] = DefaultCharacter;
             }
         }
     }
 
     private void DrawBorder()
     {
-        for (int x = 1; x <= width; x++)
+        for (int x = 1; x <= Width; x++)
         {
-            pixels[0, x] = '-';
-            pixels[height + 1, x] = '-';
+            Pixels[0, x] = BorderHorizontalCharacter;
+            Pixels[Height + 1, x] = BorderHorizontalCharacter;
         }
 
-        for (int y = 1; y <= height; y++)
+        for (int y = 1; y <= Height; y++)
         {
-            pixels[y, 0] = '|';
-            pixels[y, width + 1] = '|';
+            Pixels[y, 0] = BorderVerticalCharacter;
+            Pixels[y, Width + 1] = BorderVerticalCharacter;
         }
 
-        pixels[0, 0] = '+';
-        pixels[0, width + 1] = '+';
-        pixels[height + 1, 0] = '+';
-        pixels[height + 1, width + 1] = '+';
+        Pixels[0, 0] = BorderCornerCharacter;
+        Pixels[0, Width + 1] = BorderCornerCharacter;
+        Pixels[Height + 1, 0] = BorderCornerCharacter;
+        Pixels[Height + 1, Width + 1] = BorderCornerCharacter;
     }
 }
