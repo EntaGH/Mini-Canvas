@@ -2,13 +2,14 @@
 
 public class CommandHandler
 {
-    private Canvas? canvas;
+    private Canvas? Canvas;
 
-    private readonly Dictionary<string, CommandDefinition> handlers;
+    private readonly Dictionary<string, CommandDefinition> Handlers;
+    private readonly char SpaceCharacter = ' ';
 
     public CommandHandler()
     {
-        handlers = new Dictionary<string, CommandDefinition>
+        Handlers = new Dictionary<string, CommandDefinition>
         {
             ["C"] = new(['i', 'i'], CreateCanvas),
             ["L"] = new(['i', 'i', 'i', 'i'], DrawLine),
@@ -22,14 +23,16 @@ public class CommandHandler
     {
         try
         {
-            string[] parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            string[] parts = input.Split(SpaceCharacter, StringSplitOptions.RemoveEmptyEntries);
 
             if (parts.Length == 0)
+            {
                 throw new ArgumentException("Command cannot be empty.");
+            }
 
             string command = parts[0];
 
-            if (!handlers.TryGetValue(command, out CommandDefinition? definition))
+            if (!Handlers.TryGetValue(command, out CommandDefinition? definition))
             {
                 throw new ArgumentException($"Invalid command: '{command}'.");
             }
@@ -49,7 +52,7 @@ public class CommandHandler
         }
         finally
         {
-            canvas?.Print();
+            Canvas?.Print();
         }
     }
 
@@ -71,23 +74,29 @@ public class CommandHandler
             switch (expectedArguments[i])
             {
                 case 'i':
-                    if (!int.TryParse(args[i], out _))
                     {
-                        throw new FormatException($"Argument {i + 1} of command '{command}' " + $"must be an integer.");
-                    }
+                        if (!int.TryParse(args[i], out _))
+                        {
+                            throw new FormatException($"Argument {i + 1} of command '{command}' " + $"must be an integer.");
+                        }
 
-                    break;
+                        break;
+                    }
 
                 case 'c':
-                    if (args[i].Length != 1)
                     {
-                        throw new ArgumentException($"Argument {i + 1} of command '{command}' " + $"must be a single character.");
+                        if (args[i].Length != 1)
+                        {
+                            throw new ArgumentException($"Argument {i + 1} of command '{command}' " + $"must be a single character.");
+                        }
+
+                        break;
                     }
 
-                    break;
-
                 default:
-                    throw new InvalidOperationException($"Unknown argument type '{expectedArguments[i]}'.");
+                    {
+                        throw new InvalidOperationException($"Unknown argument type '{expectedArguments[i]}'.");
+                    }
             }
         }
     }
@@ -97,24 +106,34 @@ public class CommandHandler
         switch (e)
         {
             case ArgumentOutOfRangeException:
-                Console.WriteLine($"Invalid value: {e.Message}");
-                break;
+                {
+                    Console.WriteLine($"Invalid value: {e.Message}");
+                    break;
+                }
 
             case ArgumentException:
-                Console.WriteLine($"Invalid argument: {e.Message}");
-                break;
+                {
+                    Console.WriteLine($"Invalid argument: {e.Message}");
+                    break;
+                }
 
             case FormatException:
-                Console.WriteLine($"Invalid format: {e.Message}");
-                break;
+                {
+                    Console.WriteLine($"Invalid format: {e.Message}");
+                    break;
+                }
 
             case InvalidOperationException:
-                Console.WriteLine($"Invalid operation: {e.Message}");
-                break;
+                {
+                    Console.WriteLine($"Invalid operation: {e.Message}");
+                    break;
+                }
 
             default:
-                Console.WriteLine($"Unexpected error: {e.Message}");
-                break;
+                {
+                    Console.WriteLine($"Unexpected error: {e.Message}");
+                    break;
+                }
         }
     }
 
@@ -123,45 +142,51 @@ public class CommandHandler
         int width = int.Parse(args[0]);
         int height = int.Parse(args[1]);
 
-        canvas = new Canvas(width, height);
+        Canvas = new Canvas(width, height);
     }
 
     private void DrawLine(string[] args)
     {
-        if (canvas == null)
+        if (Canvas is null)
+        {
             return;
+        }
 
         int x1 = int.Parse(args[0]);
         int y1 = int.Parse(args[1]);
         int x2 = int.Parse(args[2]);
         int y2 = int.Parse(args[3]);
 
-        canvas.DrawLine(x1, y1, x2, y2);
+        Canvas.DrawLine(x1, y1, x2, y2);
     }
 
     private void DrawRectangle(string[] args)
     {
-        if (canvas == null)
+        if (Canvas is null)
+        {
             return;
+        }
 
         int x1 = int.Parse(args[0]);
         int y1 = int.Parse(args[1]);
         int x2 = int.Parse(args[2]);
         int y2 = int.Parse(args[3]);
 
-        canvas.DrawRectangle(x1, y1, x2, y2);
+        Canvas.DrawRectangle(x1, y1, x2, y2);
     }
 
     private void BucketFill(string[] args)
     {
-        if (canvas == null)
+        if (Canvas is null)
+        {
             return;
+        }
 
         int x = int.Parse(args[0]);
         int y = int.Parse(args[1]);
         char color = args[2][0];
 
-        canvas.BucketFill(x, y, color);
+        Canvas.BucketFill(x, y, color);
     }
 
     private void Quit(string[] args)
