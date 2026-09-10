@@ -2,11 +2,11 @@
 
 public class Canvas
 {
-    private readonly char _drawCharacter = 'x';
-    private readonly char _defaultCharacter = ' ';
-    private readonly char _borderHorizontalCharacter = '-';
-    private readonly char _borderVerticalCharacter = '|';
-    private readonly char _borderCornerCharacter = '+';
+    private const char DrawCharacter = 'x';
+    private const char DefaultCharacter = ' ';
+    private const char BorderHorizontalCharacter = '-';
+    private const char BorderVerticalCharacter = '|';
+    private const char BorderCornerCharacter = '+';
     public int Width { get; }
     public int Height { get; }
     private readonly char[,] _pixels;
@@ -41,7 +41,7 @@ public class Canvas
 
             for (int y = start; y <= end; y++)
             {
-                SetPixel(x1, y, _drawCharacter);
+                SetPixel(x1, y, DrawCharacter);
             }
         }
         else
@@ -51,7 +51,7 @@ public class Canvas
 
             for (int x = start; x <= end; x++)
             {
-                SetPixel(x, y1, _drawCharacter);
+                SetPixel(x, y1, DrawCharacter);
             }
         }
     }
@@ -154,7 +154,7 @@ public class Canvas
         {
             for (int x = 0; x < Width + 2; x++)
             {
-                _pixels[y, x] = _defaultCharacter;
+                _pixels[y, x] = DefaultCharacter;
             }
         }
     }
@@ -163,19 +163,19 @@ public class Canvas
     {
         for (int x = 1; x <= Width; x++)
         {
-            _pixels[0, x] = _borderHorizontalCharacter;
-            _pixels[Height + 1, x] = _borderHorizontalCharacter;
+            _pixels[0, x] = BorderHorizontalCharacter;
+            _pixels[Height + 1, x] = BorderHorizontalCharacter;
         }
 
         for (int y = 1; y <= Height; y++)
         {
-            _pixels[y, 0] = _borderVerticalCharacter;
-            _pixels[y, Width + 1] = _borderVerticalCharacter;
+            _pixels[y, 0] = BorderVerticalCharacter;
+            _pixels[y, Width + 1] = BorderVerticalCharacter;
         }
 
-        _pixels[0, 0] = _borderCornerCharacter;
-        _pixels[0, Width + 1] = _borderCornerCharacter;
-        _pixels[Height + 1, 0] = _borderCornerCharacter;
-        _pixels[Height + 1, Width + 1] = _borderCornerCharacter;
+        _pixels[0, 0] = BorderCornerCharacter;
+        _pixels[0, Width + 1] = BorderCornerCharacter;
+        _pixels[Height + 1, 0] = BorderCornerCharacter;
+        _pixels[Height + 1, Width + 1] = BorderCornerCharacter;
     }
 }

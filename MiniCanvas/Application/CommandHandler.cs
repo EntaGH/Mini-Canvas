@@ -5,7 +5,7 @@ public class CommandHandler
     private Canvas? _canvas;
 
     private readonly Dictionary<string, CommandDefinition> _handlers;
-    private readonly char _spaceCharacter = ' ';
+    private const char SpaceCharacter = ' ';
 
     public CommandHandler()
     {
@@ -23,7 +23,7 @@ public class CommandHandler
     {
         try
         {
-            string[] parts = input.Split(_spaceCharacter, StringSplitOptions.RemoveEmptyEntries);
+            string[] parts = input.Split(SpaceCharacter, StringSplitOptions.RemoveEmptyEntries);
 
             if (parts.Length == 0)
             {
