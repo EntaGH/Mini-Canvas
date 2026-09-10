@@ -2,14 +2,14 @@
 
 public class CommandHandler
 {
-    private Canvas? Canvas;
+    private Canvas? _canvas;
 
-    private readonly Dictionary<string, CommandDefinition> Handlers;
-    private readonly char SpaceCharacter = ' ';
+    private readonly Dictionary<string, CommandDefinition> _handlers;
+    private readonly char _spaceCharacter = ' ';
 
     public CommandHandler()
     {
-        Handlers = new Dictionary<string, CommandDefinition>
+        _handlers = new Dictionary<string, CommandDefinition>
         {
             ["C"] = new(['i', 'i'], CreateCanvas),
             ["L"] = new(['i', 'i', 'i', 'i'], DrawLine),
@@ -23,7 +23,7 @@ public class CommandHandler
     {
         try
         {
-            string[] parts = input.Split(SpaceCharacter, StringSplitOptions.RemoveEmptyEntries);
+            string[] parts = input.Split(_spaceCharacter, StringSplitOptions.RemoveEmptyEntries);
 
             if (parts.Length == 0)
             {
@@ -32,7 +32,7 @@ public class CommandHandler
 
             string command = parts[0];
 
-            if (!Handlers.TryGetValue(command, out CommandDefinition? definition))
+            if (!_handlers.TryGetValue(command, out CommandDefinition? definition))
             {
                 throw new ArgumentException($"Invalid command: '{command}'.");
             }
@@ -42,7 +42,7 @@ public class CommandHandler
             ValidateArguments(
                 command,
                 args,
-                definition.Arguments.ToList());
+                definition.Arguments);
 
             definition.Handler(args);
         }
@@ -52,7 +52,7 @@ public class CommandHandler
         }
         finally
         {
-            Canvas?.Print();
+            _canvas?.Print();
         }
     }
 
@@ -142,12 +142,12 @@ public class CommandHandler
         int width = int.Parse(args[0]);
         int height = int.Parse(args[1]);
 
-        Canvas = new Canvas(width, height);
+        _canvas = new Canvas(width, height);
     }
 
     private void DrawLine(string[] args)
     {
-        if (Canvas is null)
+        if (_canvas is null)
         {
             return;
         }
@@ -157,12 +157,12 @@ public class CommandHandler
         int x2 = int.Parse(args[2]);
         int y2 = int.Parse(args[3]);
 
-        Canvas.DrawLine(x1, y1, x2, y2);
+        _canvas.DrawLine(x1, y1, x2, y2);
     }
 
     private void DrawRectangle(string[] args)
     {
-        if (Canvas is null)
+        if (_canvas is null)
         {
             return;
         }
@@ -172,12 +172,12 @@ public class CommandHandler
         int x2 = int.Parse(args[2]);
         int y2 = int.Parse(args[3]);
 
-        Canvas.DrawRectangle(x1, y1, x2, y2);
+        _canvas.DrawRectangle(x1, y1, x2, y2);
     }
 
     private void BucketFill(string[] args)
     {
-        if (Canvas is null)
+        if (_canvas is null)
         {
             return;
         }
@@ -186,7 +186,7 @@ public class CommandHandler
         int y = int.Parse(args[1]);
         char color = args[2][0];
 
-        Canvas.BucketFill(x, y, color);
+        _canvas.BucketFill(x, y, color);
     }
 
     private void Quit(string[] args)

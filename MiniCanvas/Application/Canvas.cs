@@ -2,14 +2,14 @@
 
 public class Canvas
 {
-    private readonly char DrawCharacter = 'x';
-    private readonly char DefaultCharacter = ' ';
-    private readonly char BorderHorizontalCharacter = '-';
-    private readonly char BorderVerticalCharacter = '|';
-    private readonly char BorderCornerCharacter = '+';
-    private readonly int Width;
-    private readonly int Height;
-    private readonly char[,] Pixels;
+    private readonly char _drawCharacter = 'x';
+    private readonly char _defaultCharacter = ' ';
+    private readonly char _borderHorizontalCharacter = '-';
+    private readonly char _borderVerticalCharacter = '|';
+    private readonly char _borderCornerCharacter = '+';
+    public int Width { get; }
+    public int Height { get; }
+    private readonly char[,] _pixels;
 
     public Canvas(int width, int height)
     {
@@ -21,7 +21,7 @@ public class Canvas
         this.Width = width;
         this.Height = height;
 
-        Pixels = new char[height + 2, width + 2];
+        _pixels = new char[height + 2, width + 2];
 
         Clear();
         DrawBorder();
@@ -41,7 +41,7 @@ public class Canvas
 
             for (int y = start; y <= end; y++)
             {
-                SetPixel(x1, y, DrawCharacter);
+                SetPixel(x1, y, _drawCharacter);
             }
         }
         else
@@ -51,7 +51,7 @@ public class Canvas
 
             for (int x = start; x <= end; x++)
             {
-                SetPixel(x, y1, DrawCharacter);
+                SetPixel(x, y1, _drawCharacter);
             }
         }
     }
@@ -118,7 +118,7 @@ public class Canvas
         {
             for (int x = 0; x < Width + 2; x++)
             {
-                Console.Write(Pixels[y, x]);
+                Console.Write(_pixels[y, x]);
             }
 
             Console.WriteLine();
@@ -127,7 +127,7 @@ public class Canvas
 
     private char GetPixel(int x, int y)
     {
-        return Pixels[y, x];
+        return _pixels[y, x];
     }
 
     private void SetPixel(int x, int y, char value)
@@ -137,7 +137,7 @@ public class Canvas
             return;
         }
 
-        Pixels[y, x] = value;
+        _pixels[y, x] = value;
     }
 
     private bool IsInside(int x, int y)
@@ -154,7 +154,7 @@ public class Canvas
         {
             for (int x = 0; x < Width + 2; x++)
             {
-                Pixels[y, x] = DefaultCharacter;
+                _pixels[y, x] = _defaultCharacter;
             }
         }
     }
@@ -163,19 +163,19 @@ public class Canvas
     {
         for (int x = 1; x <= Width; x++)
         {
-            Pixels[0, x] = BorderHorizontalCharacter;
-            Pixels[Height + 1, x] = BorderHorizontalCharacter;
+            _pixels[0, x] = _borderHorizontalCharacter;
+            _pixels[Height + 1, x] = _borderHorizontalCharacter;
         }
 
         for (int y = 1; y <= Height; y++)
         {
-            Pixels[y, 0] = BorderVerticalCharacter;
-            Pixels[y, Width + 1] = BorderVerticalCharacter;
+            _pixels[y, 0] = _borderVerticalCharacter;
+            _pixels[y, Width + 1] = _borderVerticalCharacter;
         }
 
-        Pixels[0, 0] = BorderCornerCharacter;
-        Pixels[0, Width + 1] = BorderCornerCharacter;
-        Pixels[Height + 1, 0] = BorderCornerCharacter;
-        Pixels[Height + 1, Width + 1] = BorderCornerCharacter;
+        _pixels[0, 0] = _borderCornerCharacter;
+        _pixels[0, Width + 1] = _borderCornerCharacter;
+        _pixels[Height + 1, 0] = _borderCornerCharacter;
+        _pixels[Height + 1, Width + 1] = _borderCornerCharacter;
     }
 }
